@@ -1,0 +1,15 @@
+# Python sanal ortamı (Bunu asla yükleme, herkes kendi kurar)
+.venv1/
+venv/
+__pycache__/
+*.pyc
+
+# PyCharm ayar dosyaları
+.idea/
+
+# İşletim sistemi dosyaları
+.DS_Store
+Thumbs.db
+
+# Büyük veri dosyaları (İsteğe bağlı, csv çok büyükse ekle)
+# test_verileri_kontrol.csv

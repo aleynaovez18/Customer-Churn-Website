@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TelekomAI | Pro Analiz Portalı</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <style>
+        :root {
+            --telekom-blue: #004a99;
+            --telekom-gradient: linear-gradient(135deg, #004a99 0%, #007bff 100%);
+            --glass-bg: rgba(255, 255, 255, 0.95);
+        }
+
+        body {
+            background: #f0f4f8;
+            background-image: radial-gradient(#d1d9e6 1px, transparent 1px);
+            background-size: 40px 40px;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            color: #2d3436;
+        }
+
+        /* Navbar & Header */
+        .navbar {
+            background: var(--telekom-gradient);
+            padding: 1rem 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        /* Maskot ve Karşılama Alanı */
+        .welcome-section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            border-bottom: 4px solid var(--telekom-blue);
+        }
+
+        .maskot-container {
+            position: relative;
+            margin-right: 25px;
+        }
+
+        .maskot-img {
+            width: 100px;
+            height: 100px;
+            filter: drop-shadow(0 5px 15px rgba(0,74,153,0.2));
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* Form Tasarımı */
+        .main-card {
+            border: none;
+            border-radius: 25px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--telekom-blue);
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title i { margin-right: 10px; }
+
+        .form-label { font-weight: 600; color: #4a4a4a; margin-bottom: 8px; }
+
+        .form-select, .form-control {
+            border-radius: 12px;
+            border: 2px solid #edf2f7;
+            padding: 10px 15px;
+            transition: all 0.3s;
+        }
+
+        .form-select:focus, .form-control:focus {
+            border-color: var(--telekom-blue);
+            box-shadow: 0 0 0 4px rgba(0,74,153,0.1);
+        }
+
+        .info-tag {
+            font-size: 0.75rem;
+            color: #718096;
+            background: #f7fafc;
+            padding: 4px 8px;
+            border-radius: 6px;
+            display: inline-block;
+            margin-top: 5px;
+        }
+
+        /* Servis Kartları */
+        .service-card {
+            background: white;
+            border: 2px solid #edf2f7;
+            border-radius: 15px;
+            padding: 15px;
+            transition: all 0.3s;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .service-card:hover {
+            border-color: var(--telekom-blue);
+            background: var(--telekom-light);
+            transform: scale(1.03);
+        }
+
+        /* Buton */
+        .btn-predict {
+            background: var(--telekom-gradient);
+            border: none;
+            color: white;
+            padding: 18px;
+            border-radius: 15px;
+            font-weight: 800;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+            transition: all 0.4s;
+            box-shadow: 0 10px 20px rgba(0,74,153,0.3);
+        }
+
+        .btn-predict:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px rgba(0,74,153,0.4);
+            filter: brightness(1.1);
+        }
+
+        /* Sonuç Alanı */
+        #resultArea {
+            display: none;
+            border-radius: 20px;
+            border: none;
+            padding: 30px !important;
+        }
+
+        .alert-danger { background: #fff5f5; border-left: 8px solid #fc8181; color: #c53030; }
+        .alert-success { background: #f0fff4; border-left: 8px solid #68d391; color: #276749; }
+
+        .badge-ai {
+            background: var(--telekom-blue);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar mb-4">
+    <div class="container d-flex justify-content-between align-items-center">
+        <span class="navbar-brand mb-0 h1 text-white fw-bold">
+            <i class="fa-solid fa-microchip me-2"></i>TelekomAI <span class="fw-light">Dashboard</span>
+        </span>
+        <span class="badge-ai animate__animated animate__pulse animate__infinite">v2.0 AI Engine</span>
+    </div>
+</nav>
+
+<div class="container mb-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+
+            <div class="welcome-section animate__animated animate__fadeInDown">
+                <div class="maskot-container">
+                    <img src="https://cdn-icons-png.flaticon.com/512/4712/4712139.png" alt="AI Robot Maskot" class="maskot-img">
+                </div>
+                <div>
+                    <h3 class="fw-bold mb-1">Merhaba! Ben TelekomAI Rehberi</h3>
+                    <p class="text-muted mb-0">Verileri aşağıya girin, ben de sizin için müşteri geleceğini tahmin edeyim!</p>
+                </div>
+            </div>
+
+            <div class="card main-card p-4 p-md-5">
+                <form id="predictionForm">
+
+                    <h5 class="section-title"><i class="fa-solid fa-user-gear"></i> 1. Müşteri Demografisi</h5>
+                    <div class="row mb-4">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Yaş Grubu</label>
+                            <select class="form-select shadow-sm" name="SeniorCitizen">
+                                <option value="0">Genç / Orta Yaş</option>
+                                <option value="1">65+ Yaşlı (Senior)</option>
+                            </select>
+                            <span class="info-tag"><i class="fa-solid fa-info-circle"></i> Yaş faktörü kampanya duyarlılığını etkiler.</span>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Müşterilik Süresi (Ay)</label>
+                            <div class="input-group shadow-sm">
+                                <span class="input-group-text bg-white"><i class="fa-solid fa-calendar-check text-primary"></i></span>
+                                <input type="number" class="form-control" name="tenure" value="12" min="0" required>
+                            </div>
+                            <span class="info-tag"><i class="fa-solid fa-info-circle"></i> Şirketle olan toplam bağ süresi.</span>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Aile / Bağımlılık</label>
+                            <select class="form-select shadow-sm" name="IsFamily">
+                                <option value="1">Evli / Aile Paketi</option>
+                                <option value="0">Bekar / Bireysel</option>
+                            </select>
+                            <span class="info-tag"><i class="fa-solid fa-info-circle"></i> Aile paketleri genellikle sadakati artırır.</span>
+                        </div>
+                    </div>
+
+                    <h5 class="section-title"><i class="fa-solid fa-server"></i> 2. Teknik Servis Yapısı</h5>
+                    <div class="row mb-4">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">İnternet Altyapısı</label>
+                            <select class="form-select shadow-sm" name="InternetService">
+                                <option value="Fiber optic">Fiber Optik (Premium)</option>
+                                <option value="DSL">DSL (Standart)</option>
+                                <option value="No">İnternet Hizmeti Yok</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Hat Durumu</label>
+                            <select class="form-select shadow-sm" name="MultipleLines">
+                                <option value="No">Tek Hat</option>
+                                <option value="Yes">Çoklu Hat (Avantajlı)</option>
+                                <option value="No phone service">Telefon Hizmeti Yok</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Aylık Fatura Tutarı ($)</label>
+                            <div class="input-group shadow-sm">
+                                <span class="input-group-text bg-white"><i class="fa-solid fa-dollar-sign text-success"></i></span>
+                                <input type="number" step="0.01" class="form-control" name="MonthlyCharges" value="50" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h5 class="section-title"><i class="fa-solid fa-file-invoice-dollar"></i> 3. Sözleşme ve Finans</h5>
+                    <div class="row mb-4">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Sözleşme Modeli</label>
+                            <select class="form-select shadow-sm" name="Contract">
+                                <option value="Month-to-month">Aylık (Esnek)</option>
+                                <option value="One year">1 Yıllık Taahhüt</option>
+                                <option value="Two year">2 Yıllık Taahhüt</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Fatura Gönderimi</label>
+                            <select class="form-select shadow-sm" name="PaperlessBilling">
+                                <option value="Yes">Dijital Ekstre (E-Posta)</option>
+                                <option value="No">Fiziksel Kağıt Fatura</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Ödeme Kanalı</label>
+                            <select class="form-select shadow-sm" name="PaymentMethod">
+                                <option value="Electronic check">Elektronik Çek</option>
+                                <option value="Credit card (automatic)">Kredi Kartı (Otomatik)</option>
+                                <option value="Bank transfer (automatic)">Banka Havalesi (Otomatik)</option>
+                                <option value="Mailed check">Posta Çeki</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-5">
+                        <label class="form-label fw-bold d-block mb-3 text-center text-muted">Kullanılan Ek Dijital Servisler</label>
+                        <div class="row g-3">
+                            <div class="col-6 col-md-4">
+                                <div class="service-card shadow-sm">
+                                    <input type="checkbox" class="srv-check form-check-input me-2">
+                                    <label class="small fw-bold mb-0"><i class="fa-solid fa-shield-halved text-primary me-1"></i> Güvenlik</label>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-4">
+                                <div class="service-card shadow-sm">
+                                    <input type="checkbox" class="srv-check form-check-input me-2">
+                                    <label class="small fw-bold mb-0"><i class="fa-solid fa-cloud-arrow-up text-info me-1"></i> Yedekleme</label>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-4">
+                                <div class="service-card shadow-sm">
+                                    <input type="checkbox" class="srv-check form-check-input me-2">
+                                    <label class="small fw-bold mb-0"><i class="fa-solid fa-laptop-medical text-danger me-1"></i> Cihaz Koruma</label>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-4">
+                                <div class="service-card shadow-sm">
+                                    <input type="checkbox" class="srv-check form-check-input me-2">
+                                    <label class="small fw-bold mb-0"><i class="fa-solid fa-headset text-warning me-1"></i> Teknik Destek</label>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-4">
+                                <div class="service-card shadow-sm">
+                                    <input type="checkbox" class="srv-check form-check-input me-2">
+                                    <label class="small fw-bold mb-0"><i class="fa-solid fa-tv text-secondary me-1"></i> TV Paketi</label>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-4">
+                                <div class="service-card shadow-sm">
+                                    <input type="checkbox" class="srv-check form-check-input me-2">
+                                    <label class="small fw-bold mb-0"><i class="fa-solid fa-film text-dark me-1"></i> Film Paketi</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-predict w-100">
+                        <i class="fa-solid fa-wand-magic-sparkles me-2"></i>AKILLI ANALİZİ ÇALIŞTIR
+                    </button>
+                </form>
+
+                <div id="resultArea" class="mt-5 shadow-lg animate__animated">
+                    <div class="row align-items-center">
+                        <div class="col-md-2 text-center mb-3 mb-md-0">
+                            <div id="resultIconContainer" class="p-3 bg-white rounded-circle shadow-sm d-inline-block">
+                                <i id="resultIcon" class="fa-3x"></i>
+                            </div>
+                        </div>
+                        <div class="col-md-10">
+                            <h3 id="resultTitle" class="fw-extrabold mb-1"></h3>
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="progress w-50 me-3" style="height: 10px; border-radius: 10px;">
+                                    <div id="probBar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"></div>
+                                </div>
+                                <span id="resultProb" class="badge bg-dark"></span>
+                            </div>
+                            <div class="p-3 bg-white bg-opacity-50 rounded-4">
+                                <h6 class="fw-bold text-uppercase small mb-2"><i class="fa-solid fa-robot me-2"></i>Yapay Zeka Önerisi:</h6>
+                                <p id="resultRec" class="mb-0 italic"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('predictionForm').onsubmit = async (e) => {
+        e.preventDefault();
+
+        // Buton animasyonu
+        const btn = e.target.querySelector('button');
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Analiz Ediliyor...';
+        btn.disabled = true;
+
+        const formData = new FormData(e.target);
+        const data = Object.fromEntries(formData.entries());
+        const serviceCount = document.querySelectorAll('.srv-check:checked').length;
+
+        const payload = {
+            Contract: data.Contract,
+            PaperlessBilling: data.PaperlessBilling,
+            MultipleLines: data.MultipleLines,
+            InternetService: data.InternetService,
+            PaymentMethod: data.PaymentMethod,
+            SeniorCitizen: parseFloat(data.SeniorCitizen),
+            tenure: parseFloat(data.tenure),
+            MonthlyCharges: parseFloat(data.MonthlyCharges),
+            TotalServicesCount: parseFloat(serviceCount),
+            IsFamily: parseFloat(data.IsFamily)
+        };
+
+        try {
+            const response = await fetch('/predict', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(payload)
+            });
+
+            const result = await response.json();
+            const resArea = document.getElementById('resultArea');
+            const resIcon = document.getElementById('resultIcon');
+            const probBar = document.getElementById('probBar');
+
+            resArea.style.display = 'block';
+            resArea.classList.remove('animate__bounceIn', 'animate__headShake');
+
+            document.getElementById('resultTitle').innerText = result.prediction;
+            document.getElementById('resultProb').innerText = `Risk Skoru: ${result.probability}`;
+            document.getElementById('resultRec').innerText = result.recommendation;
+
+            // Yüzde çubuğunu ayarla
+            const probVal = parseFloat(result.probability.replace('%', ''));
+            probBar.style.width = probVal + '%';
+
+            if(result.is_churn === 1) {
+                resArea.className = 'mt-5 p-4 alert alert-danger animate__animated animate__headShake';
+                resIcon.className = 'fa-solid fa-user-minus text-danger';
+                probBar.className = 'progress-bar bg-danger progress-bar-striped progress-bar-animated';
+            } else {
+                resArea.className = 'mt-5 p-4 alert alert-success animate__animated animate__bounceIn';
+                resIcon.className = 'fa-solid fa-user-shield text-success';
+                probBar.className = 'progress-bar bg-success progress-bar-striped progress-bar-animated';
+            }
+
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        } catch (error) {
+            alert("Bir hata oluştu. Lütfen bağlantınızı kontrol edin.");
+        } finally {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }
+    };
+</script>
+</body>
+</html>
