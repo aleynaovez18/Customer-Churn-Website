@@ -12,4 +12,4 @@ __pycache__/
 Thumbs.db
 
 # Büyük veri dosyaları (İsteğe bağlı, csv çok büyükse ekle)
-# test_verileri_kontrol.csv
+test_verileri_kontrol.csv
